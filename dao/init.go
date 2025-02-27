@@ -52,6 +52,7 @@ func Database(connRead, connWrite string) {
 	Migration()
 }
 
+// 创建一个带有上下文 (context.Context) 的 GORM 数据库实例，在数据库操作中传递上下文信息
 func NewDBClient(ctx context.Context) *gorm.DB {
 	db := _db
 	return db.WithContext(ctx)

@@ -31,13 +31,16 @@ func PadPwd(srcByte []byte, blockSize int) []byte {
 
 // 加密
 func (k *Encryption) AesEncoding(src string) string {
+	//将输入字符串转换为字节数组
 	srcByte := []byte(src)
+	//创建 AES 密码块
 	block, err := aes.NewCipher([]byte(k.key))
 	if err != nil {
 		return ""
 	}
-	//密码填充
-	NewSrcByte := PadPwd(srcByte, block.BlockSize()) //由于字节长度不够，需要填充
+	//密码填充，由于字节长度不够，需要填充
+	NewSrcByte := PadPwd(srcByte, block.BlockSize())
+	//加密
 	dst := make([]byte, len(NewSrcByte))
 	block.Encrypt(dst, NewSrcByte)
 	//base64编码

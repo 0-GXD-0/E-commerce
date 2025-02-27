@@ -17,8 +17,11 @@ type UserService struct {
 }
 
 func (service UserService) Register(ctx context.Context) serializer.Response {
+	//存储用户信息
 	var user model.User
+	//存储操作状态码
 	code := e.Success
+	//验证密钥
 	if service.Key == "" || len(service.Key) != 16 {
 		code = e.Error
 		return serializer.Response{
@@ -29,8 +32,9 @@ func (service UserService) Register(ctx context.Context) serializer.Response {
 	}
 	//10000 --->密文存储 对称加密操作
 	util.Encrypt.SetKey(service.Key)
-
+	//在 userDao 中使用带有上下文的数据库实例进行数据库操作
 	userDao := dao.NewUserDao(ctx)
+	//根据username判断用户是否存在
 	_, exist, err := userDao.ExistOrNotByUserName(service.UserName)
 	if err != nil {
 		code = e.Error
@@ -39,6 +43,7 @@ func (service UserService) Register(ctx context.Context) serializer.Response {
 			Msg:    e.GetMsg(code),
 		}
 	}
+	//用户名已存在
 	if exist {
 		code = e.ErrorExistUser
 		return serializer.Response{
@@ -46,6 +51,7 @@ func (service UserService) Register(ctx context.Context) serializer.Response {
 			Msg:    e.GetMsg(code),
 		}
 	}
+	//创建一个新的 model.User 实例，并初始化该实例的各个字段
 	user = model.User{
 		UserName: service.UserName,
 		NickName: service.NickName,

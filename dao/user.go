@@ -11,6 +11,8 @@ type userDao struct {
 	*gorm.DB
 }
 
+// 创建一个新的 userDao 实例，并将带有上下文的 GORM 数据库实例赋值给 userDao 的 DB 字段
+// 这样在 userDao 中的所有数据库操作都会带有上下文信息
 func NewUserDao(ctx context.Context) *userDao {
 	return &userDao{DB: NewDBClient(ctx)}
 }

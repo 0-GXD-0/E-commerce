@@ -21,6 +21,7 @@ const (
 	Active       string = "active" //激活用户
 )
 
+// 密码加密
 func (user *User) SetPassword(password string) error {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), PasswordCost)
 	if err != nil {
