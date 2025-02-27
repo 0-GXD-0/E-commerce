@@ -1,6 +1,9 @@
 package serializer
 
-import "E-commerce/model"
+import (
+	"E-commerce/conf"
+	"E-commerce/model"
+)
 
 type User struct {
 	ID        uint   `json:"id"`
@@ -20,7 +23,7 @@ func BuildUser(user *model.User) *User {
 		NickName:  user.NickName,
 		Email:     user.Email,
 		Status:    user.Status,
-		Avatar:    user.Avatar,
+		Avatar:    conf.Host + conf.HttpPort + conf.AvatarPath + user.Avatar,
 		CreatedAt: user.CreatedAt.Unix(),
 	}
 }
