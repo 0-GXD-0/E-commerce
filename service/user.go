@@ -16,6 +16,7 @@ type UserService struct {
 	Key      string `json:"key" form:"key"` //前端验证
 }
 
+// 注册
 func (service UserService) Register(ctx context.Context) serializer.Response {
 	//存储用户信息
 	var user model.User
@@ -75,5 +76,45 @@ func (service UserService) Register(ctx context.Context) serializer.Response {
 	return serializer.Response{
 		Status: code,
 		Msg:    e.GetMsg(code),
+	}
+}
+
+// 登录
+func (service *UserService) Login(ctx context.Context) serializer.Response {
+	var user *model.User
+	code := e.Success
+	userDao := dao.NewUserDao(ctx)
+	user, exist, err := userDao.ExistOrNotByUserName(service.UserName)
+	if !exist || err != nil {
+		code = e.ErrorExistUserNotFound
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Data:   "用户不存在",
+		}
+	}
+	if user.CheckPassword(service.Password) == false {
+		code = e.ErrorNotCompare
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Data:   "密码错误",
+		}
+	}
+	//http无状态（认证，token）
+	//token签发
+	token, err := util.GenerateToken(user.ID, service.UserName, 0)
+	if err != nil {
+		code = e.ErrorAuthToken
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Data:   "token签发失败",
+		}
+	}
+	return serializer.Response{
+		Status: code,
+		Msg:    e.GetMsg(code),
+		Data:   serializer.TokenData{User: serializer.BuildUser(user), Token: token},
 	}
 }
