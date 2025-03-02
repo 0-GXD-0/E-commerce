@@ -89,3 +89,26 @@ func UpLoadAvatar(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 	}
 }
+
+func SendEmail(c *gin.Context) {
+	var sendEmail service.SendEmailService
+	token := c.GetHeader("Authorization")
+	// 去掉 "Bearer " 前缀
+	if strings.HasPrefix(token, "Bearer ") {
+		token = strings.TrimPrefix(token, "Bearer ")
+	}
+	claims, err := util.ParseToken(token)
+	if err != nil {
+		log.Printf("Error parsing token: %v", err)
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "Token验证失败",
+		})
+		return
+	}
+	if err := c.ShouldBind(&sendEmail); err == nil {
+		res := sendEmail.Send(c.Request.Context(), claims.ID)
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, err)
+	}
+}

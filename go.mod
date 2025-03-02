@@ -10,6 +10,8 @@ require (
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	golang.org/x/exp v0.0.0-20230224173230-c95f2b4c22f2 // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	gopkg.in/mail.v2 v2.3.1 // indirect
 )
 
 require (
