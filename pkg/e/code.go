@@ -12,4 +12,5 @@ const (
 	ErrorAuthToken             = 30005
 	ErrorAuthTokenWrong        = 30006
 	ErrorAuthCheckTokenTimeout = 30007
+	ErrorUploadFail            = 30008
 )

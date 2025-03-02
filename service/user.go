@@ -7,6 +7,7 @@ import (
 	"E-commerce/pkg/util"
 	"E-commerce/serializer"
 	"context"
+	"mime/multipart"
 )
 
 type UserService struct {
@@ -131,6 +132,48 @@ func (service *UserService) Update(ctx context.Context, uid uint) serializer.Res
 	if service.NickName != "" {
 		user.NickName = service.NickName
 	}
+	err = userDao.UpdateUserById(uid, user)
+	if err != nil {
+		code = e.Error
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Error:  err.Error(),
+		}
+	}
+	return serializer.Response{
+		Status: code,
+		Msg:    e.GetMsg(code),
+		Data:   serializer.BuildUser(user),
+	}
+}
+
+// Post头像更新
+func (service *UserService) Post(ctx context.Context, uid uint, file multipart.File, fileSize int64) serializer.Response {
+	code := e.Success
+	var user *model.User
+	var err error
+	userDao := dao.NewUserDao(ctx)
+	user, err = userDao.GetUserById(uid)
+	if err != nil {
+		code = e.Error
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Error:  err.Error(),
+		}
+	}
+	//保存图片到本地
+	path, err := UploadAvatarToLocalStatic(file, uid, user.UserName)
+	if err != nil {
+		code = e.ErrorUploadFail
+		return serializer.Response{
+			Status: code,
+			Msg:    e.GetMsg(code),
+			Error:  err.Error(),
+		}
+	}
+	user.Avatar = path
 	err = userDao.UpdateUserById(uid, user)
 	if err != nil {
 		code = e.Error

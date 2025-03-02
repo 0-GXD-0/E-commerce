@@ -64,3 +64,28 @@ func UserUpdate(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	}
 }
+
+func UpLoadAvatar(c *gin.Context) {
+	file, fileHeader, _ := c.Request.FormFile("file")
+	fileSize := fileHeader.Size
+	var uploadAvatar service.UserService
+	token := c.GetHeader("Authorization")
+	// 去掉 "Bearer " 前缀
+	if strings.HasPrefix(token, "Bearer ") {
+		token = strings.TrimPrefix(token, "Bearer ")
+	}
+	claims, err := util.ParseToken(token)
+	if err != nil {
+		log.Printf("Error parsing token: %v", err)
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "Token验证失败",
+		})
+		return
+	}
+	if err := c.ShouldBind(&uploadAvatar); err == nil {
+		res := uploadAvatar.Post(c.Request.Context(), claims.ID, file, fileSize)
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, err)
+	}
+}
