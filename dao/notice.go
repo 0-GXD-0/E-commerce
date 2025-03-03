@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// 数据访问对象
 type NoticeDao struct {
 	*gorm.DB
 }

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/aes"
 	"encoding/base64"
+	"log"
 )
 
 var Encrypt *Encryption
@@ -67,20 +68,27 @@ func UnPadPwd(dst []byte) ([]byte, error) {
 // AesDecoding解密
 func (k *Encryption) AesDecoding(pwd string) string {
 	pwdByte := []byte(pwd)
+	//解码Base64编码的字符串
 	pwdByte, err := base64.StdEncoding.DecodeString(pwd)
 	if err != nil {
+		log.Printf("解码错误", err.Error())
 		return ""
 	}
+	//创建AES密码块
 	block, errBlock := aes.NewCipher([]byte(k.key))
 	if errBlock != nil {
+		log.Printf("创建AES密码块出错", errBlock.Error())
 		return ""
 	}
+	//解密
 	dst := make([]byte, len(pwdByte))
 	block.Decrypt(dst, pwdByte)
 	dst, err = UnPadPwd(dst)
 	if err != nil {
+		log.Printf("解密出错", err.Error())
 		return ""
 	}
+	log.Printf("解密后money为", string(dst))
 	return string(dst)
 }
 
