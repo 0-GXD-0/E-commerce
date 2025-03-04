@@ -43,3 +43,21 @@ func CreateDir(dirName string) bool {
 	}
 	return true
 }
+
+func UploadProductToLocalStatic(file multipart.File, userId uint, productName string) (filePath string, err error) {
+	bId := strconv.Itoa(int(userId)) //路径拼接
+	basePath := "." + conf.ProductPath + "boss" + bId + "/"
+	if !DirExistOrNot(basePath) {
+		CreateDir(basePath)
+	}
+	productPath := basePath + productName + ".jpg" //todo:把file的后缀提取出来
+	content, err := ioutil.ReadAll(file)
+	if err != nil {
+		return "", err
+	}
+	err = ioutil.WriteFile(productPath, content, 0666)
+	if err != nil {
+		return
+	}
+	return "boss" + bId + "/" + productName + ".jpg", nil
+}
