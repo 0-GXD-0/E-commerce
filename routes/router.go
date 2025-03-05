@@ -41,6 +41,7 @@ func NewRouter() *gin.Engine {
 
 			//商品操作
 			authed.POST("product", api.CreateProduct)
+			authed.POST("searchproduct", api.SearchProduct)
 		}
 	}
 	return r
