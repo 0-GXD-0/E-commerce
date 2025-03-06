@@ -4,10 +4,10 @@ import "gorm.io/gorm"
 
 type Favorite struct {
 	gorm.Model
-	User      User    `gorm:"foreignKey:UserId"`
+	User      User    `gorm:"ForeignKey:UserId"`
 	UserId    uint    `gorm:"not null"`
-	Product   Product `gorm:"foreignKey:ProductId"`
+	Product   Product `gorm:"ForeignKey:ProductId"`
 	ProductId uint    `gorm:"not null"`
-	Boss      User    `gorm:"foreignKey:BossId"`
+	Boss      User    `gorm:"ForeignKey:BossId"`
 	BossId    uint    `gorm:"not null"`
 }

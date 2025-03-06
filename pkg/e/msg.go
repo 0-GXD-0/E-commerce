@@ -16,6 +16,8 @@ var MsgFlags = map[int]string{
 	ErrorSendEmail:             "发送邮件失败",
 
 	ErrorProductImgUpload: "图片上传错误",
+
+	ErrorFavoriteExist: "收藏夹错误",
 }
 
 // GetMsg获取状态码对应的信息

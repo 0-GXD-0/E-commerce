@@ -45,6 +45,11 @@ func NewRouter() *gin.Engine {
 			//商品操作
 			authed.POST("product", api.CreateProduct)
 			authed.POST("searchproduct", api.SearchProduct)
+
+			//收藏夹操作
+			authed.POST("favorites", api.CreateFavorite)
+			authed.GET("favorites", api.ListFavorite)
+			authed.DELETE("favorites/:id", api.DeleteFavorite)
 		}
 	}
 	return r
