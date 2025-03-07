@@ -21,4 +21,7 @@ const (
 
 	//收藏夹错误
 	ErrorFavoriteExist = 50001
+
+	//购物车错误
+	ErrorCartExist = 60001
 )

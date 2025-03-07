@@ -18,6 +18,8 @@ var MsgFlags = map[int]string{
 	ErrorProductImgUpload: "图片上传错误",
 
 	ErrorFavoriteExist: "收藏夹错误",
+
+	ErrorCartExist: "购物车错误",
 }
 
 // GetMsg获取状态码对应的信息
